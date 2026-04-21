@@ -1,24 +1,19 @@
 package com.pet.shipping.tracking.pet_shipping_tracking.service;
 
 import com.pet.shipping.tracking.pet_shipping_tracking.model.Paquete;
-import com.pet.shipping.tracking.pet_shipping_tracking.repository.PaqueteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
-public class PaqueteService {
+public interface PaqueteService {
 
-    @Autowired
-    private PaqueteRepository paqueteRepository;
+    List<Paquete> obtenerTodos();
 
-    public List<Paquete> obtenerTodos() {
-        return paqueteRepository.findAll();
-    }
+    Optional<Paquete> obtenerPorId(Long id);
 
-    public Optional<Paquete> obtenerPorId(Long id) {
-        return paqueteRepository.findById(id);
-    }
+    Paquete crear(Paquete paquete);
+
+    Optional<Paquete> actualizar(Long id, Paquete datos);
+
+    boolean eliminar(Long id);
 }

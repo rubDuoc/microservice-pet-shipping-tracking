@@ -1,28 +1,21 @@
 package com.pet.shipping.tracking.pet_shipping_tracking.service;
 
 import com.pet.shipping.tracking.pet_shipping_tracking.model.Ubicacion;
-import com.pet.shipping.tracking.pet_shipping_tracking.repository.UbicacionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
-public class UbicacionService {
+public interface UbicacionService {
 
-    @Autowired
-    private UbicacionRepository ubicacionRepository;
+    List<Ubicacion> obtenerTodas();
 
-    public List<Ubicacion> obtenerTodas() {
-        return ubicacionRepository.findAll();
-    }
+    Optional<Ubicacion> obtenerPorId(Long id);
 
-    public Optional<Ubicacion> obtenerPorId(Long id) {
-        return ubicacionRepository.findById(id);
-    }
+    Optional<Ubicacion> obtenerUbicacionActualDeEnvio(Long envioId);
 
-    public Optional<Ubicacion> obtenerUbicacionActualDeEnvio(Long envioId) {
-        return ubicacionRepository.findByEnvioId(envioId);
-    }
+    Ubicacion registrar(Ubicacion ubicacion);
+
+    Optional<Ubicacion> actualizar(Long id, Ubicacion datos);
+
+    boolean eliminar(Long id);
 }

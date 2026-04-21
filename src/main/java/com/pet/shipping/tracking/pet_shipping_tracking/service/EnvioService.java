@@ -1,32 +1,25 @@
 package com.pet.shipping.tracking.pet_shipping_tracking.service;
 
 import com.pet.shipping.tracking.pet_shipping_tracking.model.Envio;
-import com.pet.shipping.tracking.pet_shipping_tracking.repository.EnvioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
-public class EnvioService {
+public interface EnvioService {
 
-    @Autowired
-    private EnvioRepository envioRepository;
+    List<Envio> obtenerTodos();
 
-    public List<Envio> obtenerTodos() {
-        return envioRepository.findAll();
-    }
+    Optional<Envio> obtenerPorId(Long id);
 
-    public Optional<Envio> obtenerPorId(Long id) {
-        return envioRepository.findById(id);
-    }
+    Optional<Envio> obtenerPorNumeroSeguimiento(String numero);
 
-    public Optional<Envio> obtenerPorNumeroSeguimiento(String numero) {
-        return envioRepository.findByNumeroSeguimiento(numero);
-    }
+    List<Envio> obtenerPorEstado(String estado);
 
-    public List<Envio> obtenerPorEstado(String estado) {
-        return envioRepository.findByEstado(estado);
-    }
+    Envio registrar(Envio envio);
+
+    Optional<Envio> actualizar(Long id, Envio datos);
+
+    Optional<Envio> actualizarEstado(Long id, String estado);
+
+    boolean eliminar(Long id);
 }

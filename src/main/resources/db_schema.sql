@@ -1,0 +1,70 @@
+-- ============================================================
+-- Script de base de datos: pet-shipping-tracking
+-- Base de datos: Oracle Autonomous Database
+-- Usuario: BD_DEV
+-- ============================================================
+
+-- Tabla PAQUETES (sin dependencias)
+CREATE TABLE PAQUETES (
+    ID           NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    DESCRIPCION  VARCHAR2(300)  NOT NULL,
+    PESO         NUMBER(8, 2)   NOT NULL,
+    DIMENSIONES  VARCHAR2(100),
+    TIPO_CARGA   VARCHAR2(100)
+);
+
+-- Tabla ENVIOS (referencia a PAQUETES)
+CREATE TABLE ENVIOS (
+    ID                  NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    NUMERO_SEGUIMIENTO  VARCHAR2(50)  NOT NULL UNIQUE,
+    ESTADO              VARCHAR2(50)  NOT NULL,
+    ORIGEN              VARCHAR2(150) NOT NULL,
+    DESTINO             VARCHAR2(150) NOT NULL,
+    FECHA_ESTIMADA      VARCHAR2(20),
+    PAQUETE_ID          NUMBER,
+    CONSTRAINT FK_ENVIO_PAQUETE FOREIGN KEY (PAQUETE_ID) REFERENCES PAQUETES(ID)
+);
+
+-- Tabla UBICACIONES (referencia a ENVIOS)
+CREATE TABLE UBICACIONES (
+    ID              NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    ENVIO_ID        NUMBER        NOT NULL,
+    CIUDAD          VARCHAR2(100) NOT NULL,
+    PAIS            VARCHAR2(100) NOT NULL,
+    DIRECCION       VARCHAR2(300),
+    FECHA_REGISTRO  VARCHAR2(30),
+    CONSTRAINT FK_UBICACION_ENVIO FOREIGN KEY (ENVIO_ID) REFERENCES ENVIOS(ID)
+);
+
+-- ============================================================
+-- Datos de prueba (mínimo 3 registros por tabla)
+-- ============================================================
+
+INSERT INTO PAQUETES (DESCRIPCION, PESO, DIMENSIONES, TIPO_CARGA)
+VALUES ('Alimento premium para perros 10kg', 10.5, '40x30x25 cm', 'NORMAL');
+
+INSERT INTO PAQUETES (DESCRIPCION, PESO, DIMENSIONES, TIPO_CARGA)
+VALUES ('Medicamento refrigerado para gatos', 0.8, '15x10x10 cm', 'REFRIGERADO');
+
+INSERT INTO PAQUETES (DESCRIPCION, PESO, DIMENSIONES, TIPO_CARGA)
+VALUES ('Juguetes y accesorios para mascotas', 2.3, '35x25x20 cm', 'FRAGIL');
+
+INSERT INTO ENVIOS (NUMERO_SEGUIMIENTO, ESTADO, ORIGEN, DESTINO, FECHA_ESTIMADA, PAQUETE_ID)
+VALUES ('ENV-001', 'EN_TRANSITO', 'Santiago', 'Valparaíso', '2026-04-25', 1);
+
+INSERT INTO ENVIOS (NUMERO_SEGUIMIENTO, ESTADO, ORIGEN, DESTINO, FECHA_ESTIMADA, PAQUETE_ID)
+VALUES ('ENV-002', 'PENDIENTE', 'Concepción', 'Temuco', '2026-04-28', 2);
+
+INSERT INTO ENVIOS (NUMERO_SEGUIMIENTO, ESTADO, ORIGEN, DESTINO, FECHA_ESTIMADA, PAQUETE_ID)
+VALUES ('ENV-003', 'ENTREGADO', 'Antofagasta', 'La Serena', '2026-04-15', 3);
+
+INSERT INTO UBICACIONES (ENVIO_ID, CIUDAD, PAIS, DIRECCION, FECHA_REGISTRO)
+VALUES (1, 'Rancagua', 'Chile', 'Av. Principal 123', '2026-04-20T08:00:00');
+
+INSERT INTO UBICACIONES (ENVIO_ID, CIUDAD, PAIS, DIRECCION, FECHA_REGISTRO)
+VALUES (2, 'Concepción', 'Chile', 'Terminal de Carga 5', '2026-04-19T14:30:00');
+
+INSERT INTO UBICACIONES (ENVIO_ID, CIUDAD, PAIS, DIRECCION, FECHA_REGISTRO)
+VALUES (3, 'La Serena', 'Chile', 'Bodega Central 2', '2026-04-15T17:45:00');
+
+COMMIT;

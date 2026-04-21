@@ -2,7 +2,7 @@ package com.pet.shipping.tracking.pet_shipping_tracking.controller;
 
 import com.pet.shipping.tracking.pet_shipping_tracking.model.Ubicacion;
 import com.pet.shipping.tracking.pet_shipping_tracking.service.UbicacionService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,8 +12,11 @@ import java.util.List;
 @RequestMapping("/api/ubicaciones")
 public class UbicacionController {
 
-    @Autowired
-    private UbicacionService ubicacionService;
+    private final UbicacionService ubicacionService;
+
+    public UbicacionController(UbicacionService ubicacionService) {
+        this.ubicacionService = ubicacionService;
+    }
 
     @GetMapping
     public ResponseEntity<List<Ubicacion>> obtenerTodas() {
@@ -27,10 +30,30 @@ public class UbicacionController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/envio/{envioId}")
+    @GetMapping("/envio/{envioId}/actual")
     public ResponseEntity<Ubicacion> obtenerUbicacionActual(@PathVariable Long envioId) {
         return ubicacionService.obtenerUbicacionActualDeEnvio(envioId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<Ubicacion> registrar(@Valid @RequestBody Ubicacion ubicacion) {
+        return ResponseEntity.ok(ubicacionService.registrar(ubicacion));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Ubicacion> actualizar(@PathVariable Long id, @Valid @RequestBody Ubicacion datos) {
+        return ubicacionService.actualizar(id, datos)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        if (ubicacionService.eliminar(id)) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

@@ -1,46 +1,41 @@
 package com.pet.shipping.tracking.pet_shipping_tracking.model;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Table(name = "ENVIOS")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Envio {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank(message = "El número de seguimiento es obligatorio")
+    @Column(name = "NUMERO_SEGUIMIENTO", nullable = false, unique = true, length = 50)
     private String numeroSeguimiento;
+
+    @NotBlank(message = "El estado es obligatorio")
+    @Column(nullable = false, length = 50)
     private String estado;
+
+    @NotBlank(message = "El origen es obligatorio")
+    @Column(nullable = false, length = 150)
     private String origen;
+
+    @NotBlank(message = "El destino es obligatorio")
+    @Column(nullable = false, length = 150)
     private String destino;
+
+    @Column(name = "FECHA_ESTIMADA", length = 20)
     private String fechaEstimada;
+
+    @Column(name = "PAQUETE_ID")
     private Long paqueteId;
-
-    public Envio() {}
-
-    public Envio(Long id, String numeroSeguimiento, String estado, String origen,
-                 String destino, String fechaEstimada, Long paqueteId) {
-        this.id = id;
-        this.numeroSeguimiento = numeroSeguimiento;
-        this.estado = estado;
-        this.origen = origen;
-        this.destino = destino;
-        this.fechaEstimada = fechaEstimada;
-        this.paqueteId = paqueteId;
-    }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getNumeroSeguimiento() { return numeroSeguimiento; }
-    public void setNumeroSeguimiento(String numeroSeguimiento) { this.numeroSeguimiento = numeroSeguimiento; }
-
-    public String getEstado() { return estado; }
-    public void setEstado(String estado) { this.estado = estado; }
-
-    public String getOrigen() { return origen; }
-    public void setOrigen(String origen) { this.origen = origen; }
-
-    public String getDestino() { return destino; }
-    public void setDestino(String destino) { this.destino = destino; }
-
-    public String getFechaEstimada() { return fechaEstimada; }
-    public void setFechaEstimada(String fechaEstimada) { this.fechaEstimada = fechaEstimada; }
-
-    public Long getPaqueteId() { return paqueteId; }
-    public void setPaqueteId(Long paqueteId) { this.paqueteId = paqueteId; }
 }

@@ -1,40 +1,38 @@
 package com.pet.shipping.tracking.pet_shipping_tracking.model;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Table(name = "UBICACIONES")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Ubicacion {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull(message = "El ID de envío es obligatorio")
+    @Column(name = "ENVIO_ID", nullable = false)
     private Long envioId;
+
+    @NotBlank(message = "La ciudad es obligatoria")
+    @Column(nullable = false, length = 100)
     private String ciudad;
+
+    @NotBlank(message = "El país es obligatorio")
+    @Column(nullable = false, length = 100)
     private String pais;
+
+    @Column(length = 300)
     private String direccion;
-    private String timestamp;
 
-    public Ubicacion() {}
-
-    public Ubicacion(Long id, Long envioId, String ciudad, String pais, String direccion, String timestamp) {
-        this.id = id;
-        this.envioId = envioId;
-        this.ciudad = ciudad;
-        this.pais = pais;
-        this.direccion = direccion;
-        this.timestamp = timestamp;
-    }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public Long getEnvioId() { return envioId; }
-    public void setEnvioId(Long envioId) { this.envioId = envioId; }
-
-    public String getCiudad() { return ciudad; }
-    public void setCiudad(String ciudad) { this.ciudad = ciudad; }
-
-    public String getPais() { return pais; }
-    public void setPais(String pais) { this.pais = pais; }
-
-    public String getDireccion() { return direccion; }
-    public void setDireccion(String direccion) { this.direccion = direccion; }
-
-    public String getTimestamp() { return timestamp; }
-    public void setTimestamp(String timestamp) { this.timestamp = timestamp; }
+    @Column(name = "FECHA_REGISTRO", length = 30)
+    private String fechaRegistro;
 }

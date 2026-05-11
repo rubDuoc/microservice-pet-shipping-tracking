@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -73,5 +74,46 @@ class EnvioServiceTest {
         assertEquals("ENV-001", resultado.get(0).getNumeroSeguimiento());
         assertEquals("ENV-002", resultado.get(1).getNumeroSeguimiento());
         verify(envioRepository, times(1)).findAll();
+    }
+
+    @Test
+    @DisplayName("Debe actualizar el estado de un envío existente")
+    void actualizarEstadoTest() {
+        // Arrange
+        Envio existente = new Envio();
+        existente.setId(7L);
+        existente.setNumeroSeguimiento("ENV-007");
+        existente.setEstado("PENDIENTE");
+        existente.setOrigen("Santiago");
+        existente.setDestino("Valparaíso");
+        existente.setFechaEstimada("2025-06-01");
+
+        when(envioRepository.findById(7L)).thenReturn(Optional.of(existente));
+        when(envioRepository.save(existente)).thenReturn(existente);
+
+        // Act
+        Optional<Envio> resultado = envioService.actualizarEstado(7L, "ENTREGADO");
+
+        // Assert
+        assertTrue(resultado.isPresent());
+        assertEquals("ENTREGADO", resultado.get().getEstado());
+        assertEquals("ENV-007", resultado.get().getNumeroSeguimiento());
+        verify(envioRepository, times(1)).findById(7L);
+        verify(envioRepository, times(1)).save(existente);
+    }
+
+    @Test
+    @DisplayName("Debe eliminar un envío cuando existe y retornar true")
+    void eliminarEnvioExistenteTest() {
+        // Arrange
+        when(envioRepository.existsById(3L)).thenReturn(true);
+
+        // Act
+        boolean resultado = envioService.eliminar(3L);
+
+        // Assert
+        assertTrue(resultado);
+        verify(envioRepository, times(1)).existsById(3L);
+        verify(envioRepository, times(1)).deleteById(3L);
     }
 }
